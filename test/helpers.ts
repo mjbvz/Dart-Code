@@ -174,17 +174,12 @@ function logOpenEditors() {
 export async function closeAllOpenFiles(): Promise<void> {
 	log(`Closing all open editors...`);
 	logOpenEditors();
-	try {
-		await withTimeout(
-			vs.commands.executeCommand("workbench.action.closeAllEditors"),
-			"closeAllEditors all editors did not complete",
-			10,
-		);
-	} catch (e) {
-		logWarn(e);
-	}
+	await vs.commands.executeCommand("workbench.action.closeAllEditors");
 	await delay(100);
-	log(`Done closing editors!`);
+	log(`After 100ms`);
+	logOpenEditors();
+	await delay(900);
+	log(`After 1s`);
 	logOpenEditors();
 }
 
@@ -212,8 +207,9 @@ export async function openFile(file: vs.Uri): Promise<vs.TextEditor> {
 	log(`Opening ${fsPath(file)}`);
 	const doc = await vs.workspace.openTextDocument(file);
 	documentEol = doc.eol === vs.EndOfLine.CRLF ? "\r\n" : "\n";
-	log(`Showing ${fsPath(file)}`);
+	log(`Showing ${fsPath(doc.uri)}`);
 	const editor = await vs.window.showTextDocument(doc);
+	log(`Waiting 100ms before continuing...`);
 	await delay(100);
 	return editor;
 }
