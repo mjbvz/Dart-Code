@@ -174,13 +174,22 @@ function logOpenEditors() {
 export async function closeAllOpenFiles(): Promise<void> {
 	log(`Closing all open editors...`);
 	logOpenEditors();
-	await vs.commands.executeCommand("workbench.action.closeAllEditors");
-	await delay(100);
-	log(`After 100ms`);
-	logOpenEditors();
-	await delay(900);
-	log(`After 1s`);
-	logOpenEditors();
+	let didComplete = false;
+	/*await*/ vs.commands.executeCommand("workbench.action.closeAllEditors").then(() => {
+		didComplete = true;
+	});
+	// Wait up to 10s for the command to finish.
+	for (let i = 0; i < 10; i++) {
+		await delay(1000);
+
+		if (didComplete)
+			break;
+
+		log(`After ${i}s, closeAllEditors has not completed.`);
+		logOpenEditors();
+	}
+	if (!didComplete)
+		throw new Error("workbench.action.closeAllEditors did not complete within 10 seconds!");
 }
 
 export async function waitUntilAllTextDocumentsAreClosed(): Promise<void> {
