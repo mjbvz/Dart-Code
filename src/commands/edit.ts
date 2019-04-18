@@ -4,7 +4,7 @@ import * as as from "../analysis/analysis_server_types";
 import { Analyzer } from "../analysis/analyzer";
 import * as editors from "../editors";
 import { fsPath } from "../utils";
-import { logError, logWarn } from "../utils/log";
+import { log, logError, logWarn } from "../utils/log";
 import { showCode } from "../utils/vscode/editor";
 
 export class EditCommands implements vs.Disposable {
@@ -109,6 +109,7 @@ export class EditCommands implements vs.Disposable {
 	}
 
 	private async applyEdits(initiatingDocument: vs.TextDocument, change: as.SourceChange): Promise<void> {
+		log(`##### APPLYING EDITS! ###############################`);
 		// We can only apply with snippets if there's a single change.
 		if (change.edits.length === 1 && change.linkedEditGroups && change.linkedEditGroups.length !== 0)
 			return this.applyEditsWithSnippets(initiatingDocument, change);
