@@ -21,6 +21,7 @@ export enum FlutterServiceExtension {
 export enum FlutterService {
 	HotReload = "reloadSources",
 	HotRestart = "hotRestart",
+	LaunchDevTools = "launchDevTools",
 }
 
 const keyTimeDilation = "timeDilation";
@@ -181,6 +182,10 @@ export class FlutterVmServiceExtensions {
 	// TODO: These services should be per-session!
 	public serviceIsRegistered(service: FlutterService): boolean {
 		return !!this.registeredServices[service];
+	}
+
+	public getServiceMethodName(service: FlutterService): string | undefined {
+		return this.registeredServices[service];
 	}
 
 	public serviceExtensionIsLoaded(id: FlutterServiceExtension) {
