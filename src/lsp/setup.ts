@@ -4,9 +4,9 @@ import * as vs from "vscode";
 import { LanguageClient, LanguageClientOptions, StreamInfo } from "vscode-languageclient";
 import * as WebSocket from "ws";
 import { config } from "../config";
-import { safeSpawn } from "../debug/utils";
 import { dartVMPath } from "../sdk/utils";
 import * as util from "../utils";
+import { safeSpawn } from "../utils/processes";
 
 let lspClient: LanguageClient;
 
